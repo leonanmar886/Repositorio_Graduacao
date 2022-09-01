@@ -1,0 +1,480 @@
+import os
+
+matrizPrincipal = []
+matrizEstilos = []
+matrizDoacao = []
+matrizVenda = []
+listatipo = 'CALÇADO§INFERIOR§SUPERIOR'
+listatamanho = 'P§M§G'
+listapadrao = 'MASCULINO§FEMININO§UNISSEX'
+listasituacao = 'VENDER§FICAR§DOAR'
+
+#cadastro das peças no arquivo e organização do arquivo em listas
+def AdcArquivo(itemSalvo,nomeArquivo):
+    with open(nomeArquivo, 'a') as arquivo:
+        arquivo.writelines(str(itemSalvo) + '\n')
+
+#leitura de dados do arquivo      
+def LerArquivo(matrizDesejada,nomeArquivo):
+    with open(nomeArquivo, 'r') as arquivo:
+        dados = arquivo.readlines()
+    for i in range(len(dados)):
+        string = dados[i].split('|')
+        if len(string) > 1:
+            string.pop()
+        else:
+            string = string
+        matrizDesejada.append(string)
+    return matrizDesejada
+
+def BuscarUltimoId(matrizOriginal):
+    LerArquivo(matrizPrincipal,'dados.txt')
+    LerArquivo(matrizDoacao,'doacao.txt')
+    if len(matrizOriginal) == 0 and len(matrizDoacao) == 0 and len(matrizVenda) == 0:
+        id = 0 #se não houverem roupas, o id é 0
+    elif len(matrizDoacao) > len(matrizPrincipal) and len(matrizDoacao) >= len(matrizVenda):
+        id = matrizDoacao[len(matrizDoacao) - 1][0] #retorna o id da ultima roupa
+    elif len(matrizVenda) >= len(matrizPrincipal) and len(matrizVenda) >= len(matrizPrincipal):
+        id = matrizVenda[len(matrizVenda) - 1][0]
+    else:
+        id = matrizOriginal[len(matrizOriginal) - 1][0]
+    return id
+
+
+def CadastrarRoupa(matrizOriginal):
+    print('-'*47 + '\n' + 'MENU --> CADASTRAR NOVAS PEÇAS\n' + '-'*47)
+    listaTipos = ['o tipo(calçado/inferior/superior)', 'a descrição','o tamanho(P/M/G)','o padrão(masculino/feminino/unissex)','a cor principal','a data de aquisição(dia/mês/ano)','a situação(ficar/vender/doar)','o preço (deixar em branco caso não seja para venda.)', 'o estilo']
+    while True:
+        try:
+            qtdItem = int(input('Quantas peças você deseja adicionar ao guarda-roupa? '))
+            break
+        except:
+            print('Quantidade de peças deve ser um número inteiro.')
+
+    for i in range(qtdItem): 
+        stringAux = ''
+        id = BuscarUltimoId(matrizOriginal) #as próximas duas linhas adicionam automaticamente o id da peça inserida
+        id = int(id)
+        stringAux = stringAux + str(id + 1) + '|'
+        print(f'Insira os dados da {i+1}ª peça: ')
+        for j in range(9):
+            adiciona = input(f'Qual {listaTipos[j]} da peça? ')
+            while j == 0 and adiciona.upper() not in listatipo:
+                adiciona = input(f'Entrada inválida. Qual {listaTipos[j]} da peça? ')
+            while j == 2 and adiciona.upper() not in listatamanho:
+                adiciona = input(f'Entrada inválida. Qual {listaTipos[j]} da peça? ')
+            while j == 3 and adiciona.upper() not in listapadrao:
+                adiciona = input(f'Entrada inválida. Qual {listaTipos[j]} da peça? ')
+            while j == 6 and adiciona.upper() not in listasituacao:
+                adiciona = input(f'Entrada inválida. Qual {listaTipos[j]} da peça? ')
+            stringAux = stringAux + adiciona.upper() + '|'
+        matrizOriginal.append(stringAux) 
+        if 'DOAR' in stringAux:
+            DoarRoupa(matrizOriginal)
+        elif 'VENDER' in stringAux:
+            VenderRoupa(matrizOriginal)
+        else:
+            AdcArquivo(stringAux,'dados.txt')
+        IdentificarEstilo(stringAux) #chamada da função que registra o estilo(IdentificarEstilo) 
+    return matrizOriginal
+
+#funcao para registrar qual o estilo da peça
+def IdentificarEstilo(estiloEscolhido): #o parametro dessa função sera definido na func "CadastrarRoupa, ele recebe uma string formatada"
+    matrizEstilos.clear()
+    LerArquivo(matrizEstilos,'estilos.txt') #essa funcao vai acessar o arquivo salvo, não perdendo nenhum dado anterior
+    listaAux = estiloEscolhido.split('|') #apos os processos que ocorrem dentro da func "CadastrarRoupa" é aplicado um split para tranformar os dados de str para list
+    listaAux.pop() #no fim da lista, justamente por conta dos processos da func "CadastrarRoupa", acaba por aparecer um espaco vazio (" "), que é o motivo da aplicação desse .pop
+    estiloEmLista = [] #nas proximas linhas, o estilo, antes string ('estilo|'), vai virar uma lista (['estilo'])
+    estiloEmLista.append(listaAux[-1])
+    estilo = listaAux[-1] + '|' #a lista é acessada no seu ultimo indice, pois o estilo agora ocupa o ultimo indice da listaAux
+    if len(matrizEstilos) != 0: #caso a matriz possua algum elemento ela entrara no interior do if e verificar se o estilo já existe
+        if estiloEmLista not in matrizEstilos:    
+            matrizEstilos.append(estiloEmLista) #a matriz que armazenará os estilos, ira receber o estilo ja formatado como lista, apenas para facilitar a comparacao entre os elementos da matriz estilos
+            AdcArquivo(estilo,'estilos.txt') #o que acontece aqui pode ser entendido melhor na func "AdcArquivo", mas ocorre aqui a inserção no arquivo
+    else:
+        matrizEstilos.append(estiloEmLista) #para a matriz estilos vai a lista com o estilo, para quesito de comparação
+        AdcArquivo(estilo,'estilos.txt') #para o arquivo que armazena os estilos vai o estilo como string, para que todos os processor de leitura e escrita no arquivo funcionem.
+
+def SelecionarEstilo():
+    matrizPrincipal.clear()
+    matrizEstilos.clear()
+    LerArquivo(matrizEstilos,'estilos.txt')
+    LerArquivo(matrizPrincipal,'dados.txt')
+    if len(matrizEstilos) == 0:
+        ListarEstilos(matrizEstilos)
+    else:
+        while True:
+            print('-'*47 + '\n' + 'MENU --> SELECIONAR PEÇAS POR ESTILO\n' + '-'*47)
+            ListarEstilos(matrizEstilos)
+            while True:
+                try:   
+                    estiloSelecionado = int(input('-'*47 + '\nDigite a linha do estilo que você deseja: '))
+                    break
+                except:
+                    None
+            while estiloSelecionado >= len(matrizEstilos) or estiloSelecionado < 0:
+                try:
+                    estiloSelecionado = int(input('-'*47 + '\nDigite a linha do estilo que você deseja: '))
+                    if estiloSelecionado >= len(matrizEstilos) or estiloSelecionado < 0:
+                        print('Digite um número de linha válido para a lista de estilos')
+                except:
+                    print('Entrada deve ser um número inteiro.')
+            print('-'*47)
+            estiloSelecionado = matrizEstilos[estiloSelecionado][0]           
+            for i in matrizPrincipal:
+                if estiloSelecionado in i:
+                    print(ExibirFormatado(i))
+            confirmacao = input('\nO estilo selecionado foi o escolhido pelo usuario? [S][N]\n')       
+            if confirmacao.upper() == 'S':
+                break
+            if confirmacao.upper() == 'N':
+                continue
+                
+
+#funcao para listar os estilos
+def ListarEstilos(matrizDesejada): #o parametro da func sera uma matriz, no caso, a matrizEstilos
+    matrizDesejada.clear() #evitar repeticoes
+    print('-'*47 + '\n' + 'MENU --> LISTAR ESTILOS\n' + '-'*47) 
+    LerArquivo(matrizDesejada,'estilos.txt') #essa funcao vai acessar o arquivo salvo, não perdendo nenhum dado anterior
+    if len(matrizDesejada) == 0: #por existir a possibilidade de não haver estilos salvos (como na primeira execução, com o arquivo limpo ainda), foi implementado um if/else para lidar com o problema
+        print('Ainda não há estilos cadastrados.') #lembrando que a base da logica do nosso codigo é a utilização de arquivos e matrizes, o que existe no arquivo esta tambem em uma matriz
+    else:    
+        for i in range(len(matrizDesejada)): #a impressao a ser feita sera a de uma matriz, por conta disso, toda a ideia de lidar com matrizes sera aplicada. o for exterior vai ate o num de linhas
+            for j in range(1): #o for interior vai ate 1 (por ser só um elemento, existe apenas uma coluna)
+                print(i,'- ESTILO: ',matrizDesejada[i][j])#a string da func vai receber a cada laço do for um elemento da matriz, nao como lista, mas sim como string        
+
+#listar peças do guarda-roupa
+def ListarPecas(matrizOriginal): 
+    print('-'*47 + '\n' + 'MENU --> VISUALIZAR GUARDA-ROUPA\n' + '-'*47)
+    matrizOriginal.clear() #limpa a matriz pra evitar duplicar informações
+    LerArquivo(matrizPrincipal,'dados.txt')
+    cond = False
+    if len(matrizOriginal) != 0:
+        while True:
+            try:        
+                filtro = int(input('Você deseja listar peças por:\n' + '-'*47 + '\n' + '1.ID\n2.Tipo\n3.Descrição\n4.Tamanho\n5.Padrão\n6.Cor\n7.Data de aquisição\n8.Situação\n9.Preço\n10.Para listar todas as peças cadastradas.\n' + '-'*47 + '\n'))
+                break
+            except:
+                print('O número inserido deve ser um inteiro.')       
+        if filtro == 1: 
+            print('-'*47 + '\n' + 'VISUALIZAR GUARDA-ROUPA --> ID\n' + '-'*47)
+            filtroEspecifico = input('qual id você deseja? ')
+            if int(filtroEspecifico) > 0:
+                cond = True
+            else:
+                while int(filtroEspecifico) <= 0:
+                    cond = cond
+                    filtroEspecifico = int(input('O id deve ser positivo. Digite-o da maneira adequada: '))
+                    if int(filtroEspecifico) > 0:
+                        cond = True
+                        break
+                    else:
+                        continue           
+        elif filtro == 2:
+            cond = True
+            print('-'*47 + '\n' + 'VISUALIZAR GUARDA-ROUPA --> TIPO\n' + '-'*47)
+            filtroEspecifico = input('Digite o tipo você deseja(calçado/inferior/superior): ').upper()
+            while filtroEspecifico.upper() not in listatipo:
+                filtroEspecifico = input('Filtro inválido. Digite o tipo você deseja(calçado/inferior/superior): ').upper()
+        elif filtro == 3:
+            cond = True
+            print('-'*47 + '\n' + 'VISUALIZAR GUARDA-ROUPA --> DESCRIÇÃO\n' + '-'*47)
+            filtroEspecifico = input('Digite a descrição da peça que você deseja: ').upper()
+        elif filtro == 4:
+            cond = True
+            print('-'*47 + '\n' + 'VISUALIZAR GUARDA-ROUPA --> TAMANHO\n' + '-'*47)
+            filtroEspecifico = input('Digite o tamanho você deseja(P/M/G): ').upper()
+            while filtroEspecifico.upper() not in listatamanho:
+                filtroEspecifico = input('Tamanho inválido. Digite o tamanho você deseja(P/M/G): ').upper()
+        elif filtro == 5:
+            cond = True
+            print('-'*47 + '\n' + 'VISUALIZAR GUARDA-ROUPA --> PADRÃO\n' + '-'*47)
+            filtroEspecifico = input('Digite o padrão que você deseja(masculino/feminino/unissex): ').upper()
+            while filtroEspecifico.upper() not in listapadrao:
+                filtroEspecifico = input('Digite o padrão que você deseja(masculino/feminino/unissex): ').upper()
+        elif filtro == 6:
+            cond = True
+            print('-'*47 + '\n' + 'VISUALIZAR GUARDA-ROUPA --> COR\n' + '-'*47)
+            filtroEspecifico = input('Digite a cor que você deseja: ').upper()
+        elif filtro == 7:
+            cond = True
+            print('-'*47 + '\n' + 'VISUALIZAR GUARDA-ROUPA --> DATA DE AQUISIÇÃO\n' + '-'*47)
+            filtroEspecifico = input('Digite a data de aquisição que você deseja (dd/mm/aaaa): ').upper()
+        elif filtro == 8:
+            cond = True
+            print('-'*47 + '\n' + 'VISUALIZAR GUARDA-ROUPA --> SITUAÇÃO\n' + '-'*47)
+            filtroEspecifico = input('Digite a situação que você deseja (ficar/doar/vender): ').upper()
+            while filtroEspecifico.upper() not in listasituacao:
+                filtroEspecifico = input('Digite a situação que você deseja (ficar/doar/vender): ').upper()
+        elif filtro == 9:
+            print('-'*47 + '\n' + 'VISUALIZAR GUARDA-ROUPA --> PREÇO\n' + '-'*47)
+            contAux = 0
+            for i in range(len(matrizOriginal)):
+                if matrizOriginal[i][7] == 'VENDER':
+                    cond = True
+                    filtroEspecifico = input('Digite o preço que você deseja: ')
+                else:
+                    cond = cond
+                    contAux += 1
+            if contAux == len(matrizOriginal):
+                print('As peças cadastradas não estão a venda, portanto, não possuem preço.')
+        else:
+            cond = True
+
+        if cond == False:
+            MostrarMenu()  
+        else:
+            if filtro == 1:
+                for i in range(len(matrizOriginal)):
+                    if matrizOriginal[i][0] == str(filtroEspecifico): 
+                        print(ExibirFormatado(matrizOriginal[i]))
+            elif filtro == 2:
+                for i in range(len(matrizOriginal)):
+                    if matrizOriginal[i][1] == filtroEspecifico: 
+                        print(ExibirFormatado(matrizOriginal[i]))
+            elif filtro == 3:
+                for i in range(len(matrizOriginal)):
+                    if matrizOriginal[i][2] == filtroEspecifico: 
+                        print(ExibirFormatado(matrizOriginal[i]))
+            elif filtro == 4:
+                for i in range(len(matrizOriginal)):
+                    if matrizOriginal[i][3] == filtroEspecifico: 
+                        print(ExibirFormatado(matrizOriginal[i]))
+            elif filtro == 5:
+                for i in range(len(matrizOriginal)):
+                    if matrizOriginal[i][4] == filtroEspecifico: 
+                        print(ExibirFormatado(matrizOriginal[i]))
+            elif filtro == 6:
+                for i in range(len(matrizOriginal)):
+                    if matrizOriginal[i][5] == filtroEspecifico: 
+                        print(ExibirFormatado(matrizOriginal[i]))
+            elif filtro == 7:
+                for i in range(len(matrizOriginal)):
+                    if matrizOriginal[i][6] == filtroEspecifico: 
+                        print(ExibirFormatado(matrizOriginal[i]))
+            elif filtro == 8:
+                for i in range(len(matrizOriginal)):
+                    if matrizOriginal[i][7] == filtroEspecifico: 
+                        print(ExibirFormatado(matrizOriginal[i]))
+            elif filtro == 9:
+                for i in range(len(matrizOriginal)):
+                    if matrizOriginal[i][8] == filtroEspecifico: 
+                        print(ExibirFormatado(matrizOriginal[i]))
+            elif filtro == 10:
+                print('-'*47 + '\n' + 'VISUALIZAR GUARDA-ROUPA --> VISUALIZAR TODAS AS PEÇAS\n' + '-'*47)
+                for i in range(len(matrizOriginal)):
+                    print(ExibirFormatado(matrizOriginal[i]))
+            else:
+                print('O filtro desejado não consta no seu guarda-roupa.')
+    else:
+        print('Não há peças cadastradas no Guarda-Roupa, cadastre peças no menu para prosseguir.')
+    
+def RemoverRoupa(matrizOriginal):
+    LerArquivo(matrizOriginal,'dados.txt')
+    if len(matrizOriginal) != 0:
+        matrizOriginal.clear() #limpa a matriz para revitar a duplicação ao ler na função abaixo
+        LerArquivo(matrizPrincipal,'dados.txt') #lê o arquivo e adiciona os dados a matrizOriginal
+        for i in range(len(matrizOriginal)): #printa os elementos da matriz (roupas e suas características) para o usuário visualizar e escolher melhor
+            print('Linha',i,'-',ExibirFormatado(matrizOriginal[i]))
+        while True:
+            try:
+                linharemov = int(input('Qual é o número da linha que você deseja remover? ')) #pega o índice (da matriz) da linha a ser removida
+                break
+            except:
+                print('Digite um número inteiro para selecionar a linha da peça a ser removida.')
+        while linharemov >= len(matrizOriginal) or linharemov < 0: #trata erros(entradas negativas ou maiores do que o tamanho da lista)
+            try:
+                linharemov = int(input('Linha digitada inválida. Qual é o número da linha que você deseja remover? '))
+                if linharemov >= len(matrizOriginal) or linharemov < 0:
+                    print('Digite um número de linha válido na lista peças para remover.')
+            except:
+                print('Entrada inválida. Digite um número inteiro.')
+        with open('dados.txt', 'r') as arquivo: #abre arquivo e armazena os dados do arquivo na varáviel 'dados' para sobescrever o arquivo sem a linha que será removida
+            dados = arquivo.readlines()
+        with open('dados.txt','w') as arquivo: #abre o arquivo no modo de escrita para sobescrever os dados anteriores sem a linha a ser removida utilizando a variável do tipo lista 'dados' 
+            for i in range(0,len(dados)): #percorre os itens em dados, que são listas cujo são armazenadas apenas uma string
+                if i != linharemov: #caso o indice i seja igual o indice indicado para remoção, a função não escreverá a linha atrelada a 'linharemov'
+                    arquivo.write(dados[i])
+        del matrizOriginal[linharemov] #retira a linha atrelada a variável de remoção da matriz e a retorna atualizada
+        print('Peça removida!')
+        repetir = input('Deseja remover mais uma peça? \n Digite 1 para sim, aperte enter para não. \n')
+        if repetir == '1':
+            RemoverRoupa(matrizOriginal)
+        else:
+            return matrizOriginal
+        return matrizOriginal
+    else:
+        print('Guarda-Roupas não possui elementos para remover')
+#listaTipos = ['o tipo(calçado/inferior/superior)', 'a descrição','o tamanho(P/M/G)','o padrão(masculino/feminino/unissex)','a cor principal','a data de aquisição(dia/mês/ano)','a situação(ficar/venda/doação)','o preço (deixar em branco caso não seja para venda.)', 'o estilo.']                                                                                                                        
+def ExibirFormatado(lista):
+    if lista[8] != '' : #se a roupa estiver a venda, a mensagem a ser exibida é diferente, e deve conter o preço da peça.
+        mensagemFormatada = '• A peça possui id {0} e é uma/um {1} de tamanho {2}, do padrão {3}, com {4} como a cor principal, e possui o estilo {5}.\nEla foi adquirida no dia {6} e atualmente está para a venda no valor de R${7}.'.format(lista[0], lista[2], lista[3], lista[4], lista[5], lista[9], lista[6], lista[8])
+    elif lista[7] == 'DOAR': #se a roupa não estiver a venda, deve ser exibida a situação da peça
+        mensagemFormatada = '• A peça possui id {0} e é uma/um {1} de tamanho {2}, do padrão {3}, com {4} como a cor principal, e possui o estilo {5}.\nEla foi adquirida no dia {6} e atualmente está com a situação de {7}, sendo doada para a instituição {8}.'.format(lista[0], lista[2], lista[3], lista[4], lista[5], lista[9], lista[6], lista[7], lista[11])
+    else:
+        mensagemFormatada = '• A peça possui id {0} e é uma/um {1} de tamanho {2}, do padrão {3}, com {4} como a cor principal, e possui o estilo {5}.\nEla foi adquirida no dia {6} e atualmente está com a situação de {7}.'.format(lista[0], lista[2], lista[3], lista[4], lista[5], lista[9], lista[6], lista[7])
+    return mensagemFormatada
+
+def AlterarRoupa(matrizOriginal):
+    LerArquivo(matrizOriginal,'dados.txt')
+    listaTipos = ['o tipo(calçado/inferior/superior)', 'a descrição','o tamanho(P/M/G)','o padrão(masculino/feminino/unissex)','a cor principal','a data de aquisição(dia/mês/ano)','a situação(ficar/venda/doação)','o preço (deixar em branco caso não seja para venda.)', 'o estilo.']
+    if len(matrizOriginal) != 0:
+        contador = 0
+        matrizOriginal.clear() #limpa a matriz para revitar a duplicação ao ler na função abaixo
+        LerArquivo(matrizPrincipal,'dados.txt') #lê o arquivo e adiciona os dados a matrizOriginal
+        for i in range(len(matrizOriginal)): #printa os elementos da matriz (roupas e suas características) para o usuário visualizar e escolher melhor
+            print('Linha',i,'-',ExibirFormatado(matrizOriginal[i]))
+
+        while True:
+            try:
+                linha_a_ser_alterada = int(input('Digite o número da linha que você deseja alterar: '))
+                if linha_a_ser_alterada >= len(matrizOriginal[0]) or linha_a_ser_alterada <= 0:
+                    print('Digite uma linha válida para a lista de características da peça.')
+                break
+            except:
+                print('Digite um número inteiro para selecionar a linha da peça a ser alterada.')
+        while linha_a_ser_alterada >= len(matrizOriginal) or linha_a_ser_alterada < 0:
+            try:
+                linha_a_ser_alterada = int(input('Digite a linha que você deseja alterar? ')) #recolhe o indice da linha a ser alterada
+                if linha_a_ser_alterada >= len(matrizOriginal) or linha_a_ser_alterada < 0:
+                    print('Digite um número de linha válido na lista de peças para alterar.')
+            except:
+                print('Entrada inválida. Digite um número inteiro.')
+                
+        with open('dados.txt','r') as arquivo: #recolhe os dados do arquvo na varíavel dados
+            dados = arquivo.readlines()
+        for i in range(0,len(listaTipos)): #printa as características da peça escolhida para ser alterada (printa as características que estão na linha da peça dentro da matriz.)
+            contador = contador + 1 #auxilia na contagem para facilitar a leitura e inserção de dados do usuário
+            print('Característica','-',contador,'-',listaTipos[i],'-',matrizOriginal[linha_a_ser_alterada][contador]) #printa de uma forma legível para o usuário
+        while True:
+            try:     
+                caracteristica_a_ser_alterada = int(input('Digite o indice da característica que você deseja alterar: ')) #recolhe o indice (coluna) em que a característica está armazenada dentro da linha
+                if caracteristica_a_ser_alterada >= len(matrizOriginal[0]) or caracteristica_a_ser_alterada <= 0:
+                    print('Digite uma linha de característica válida para a lista de características da peça.')
+                break
+            except:
+                print('Digite um número inteiro para selecionar a linha da característica a ser alterada.')
+        while caracteristica_a_ser_alterada >= len(matrizOriginal[0]) or caracteristica_a_ser_alterada <= 0: #trata erros(entradas negativas ou maiores do que o tamanho da lista)
+            try:
+                caracteristica_a_ser_alterada = int(input('Característica digitada inválida. Digite a linha da característica que você deseja alterar: '))
+                if caracteristica_a_ser_alterada >= len(matrizOriginal[0]) or caracteristica_a_ser_alterada <= 0:
+                    print('Digite uma linha de característica válida para a lista de características da peça.')
+            except:
+                print('Entrada inválida. Digite um número inteiro.')
+        nova_caracteristica = input('Digite a nova característica que você deseja implementar: ').upper() #recebe do usuário nova característica para substituir a antiga.
+        while caracteristica_a_ser_alterada == 1 and nova_caracteristica.upper() not in listatipo:
+            nova_caracteristica = input('Entrada inválida. Qual é o tipo novo da peça? ').upper()
+        while caracteristica_a_ser_alterada == 3 and nova_caracteristica.upper() not in listatamanho:
+            nova_caracteristica = input('Entrada inválida. Qual é o tamanho novo da peça? ').upper()
+        while caracteristica_a_ser_alterada == 4 and nova_caracteristica.upper() not in listapadrao:
+            nova_caracteristica = input('Entrada inválida. Qual o padrão novo da peça? ').upper()
+        while caracteristica_a_ser_alterada == 7 and nova_caracteristica.upper() not in listasituacao:
+            nova_caracteristica = input('Entrada inválida. Qual a situação nova da peça? ').upper()
+
+        
+        matrizOriginal[linha_a_ser_alterada][caracteristica_a_ser_alterada] = nova_caracteristica #substitui o elemento atrelado a linha e coluna de remoção inseridas pelo usuário anteriormente (linha_a_ser_alterada e coluna_a_ser alterada) pela nova variável (nova_característica).
+        matriz_alterar = [] #matriz para auxiliar a inserção dos novos dados (matriz com o elemento alterado) no arquivo
+        for i in range(len(dados)): #transfere os dados que estão como uma única string em dados, em vários elementos (strings) separados para efetuar a alteração
+            string = dados[i].split('|')
+            string.pop() #retira o /n da linha
+            matriz_alterar.append(string) #adiciona as novas strings a matriz_alterar que serve de auxiliar
+        matriz_alterar[linha_a_ser_alterada][caracteristica_a_ser_alterada] = nova_caracteristica # substitui o elemento atrelado as variáveis 'linha_a_ser_alterada' e 'caracteristica_a_ser_alterada' pela variável inserida 'nova_caracteristica'(todas strings)
+        linhaAux = [] #linha auxiliar para converter as várias strings da matriz_alterar em uma string só no formato correto para voltar ao arquivo os dados alterados
+        for i in range(len(matriz_alterar)): #percorre as linhas de matriz_alterar
+            strAux = '' #cria uma string para adicionar os elementos de matriz_alterar em uma só string e depois adicionala a uma listaaux
+            for j in range(len(matriz_alterar[0])): #percorre as colunas (informações das características das linhas)
+                strAux = strAux + matriz_alterar[i][j] + '|' #adiciona as caracteristicas armazenadas em matriz_alterar em uma unica string utilizando o | para separar no arquivo
+            strAux = strAux + '\n' #adiciona a quebra de linha para formatar corretamente no arquivo
+            linhaAux.append(strAux) #adiciona as novas strings a linha auxiliar que será percorrida para sobescrever no arquivo
+        with open('dados.txt','w') as arquivo: #abre o arquivo em formato de escrita
+            for i in range(len(linhaAux)): #percorre os elementos da listauxiliar que contem as strings completas com as caracterísitcas de cada roupa
+                arquivo.write(linhaAux[i]) #escreve as strings completas no arquivo
+        print("Alteração efetuada!")
+        IdentificarEstilo(strAux)
+        repetir = input('Deseja alterar mais uma peça? \n Digite 1 para sim, aperte enter para não. \n')
+        if repetir == '1':
+            AlterarRoupa(matrizOriginal)
+        else:
+            return matrizOriginal
+        return matrizOriginal #retorna a matriz com os itens alterados.
+    else:
+        print('Guarda-Roupas não possui elementos para alterar')
+
+def DoarRoupa(matrizOriginal):
+    roupasDoacao = []
+    roupaDoada = ''
+    for i in range(len(matrizOriginal)):
+        if 'DOAR' in matrizOriginal[i]:
+            roupasDoacao.append(matrizOriginal[i])
+            del matrizOriginal[i]
+    for j in range(len(roupasDoacao)):
+        roupaDoada = roupaDoada + roupasDoacao[j] + '|'
+    roupaDoada = roupaDoada + input('Para qual instituição você doou esta roupa? ').upper() + '|'
+    AdcArquivo(roupaDoada, 'doacao.txt')
+    LerArquivo(matrizDoacao,'doacao.txt')
+
+def VenderRoupa(matrizOriginal):
+    roupasVenda = []
+    roupaVendida = ''
+    for i in range(len(matrizOriginal)):
+        if 'VENDER' in matrizOriginal[i]:
+            roupasVenda.append(matrizOriginal[i])
+            del matrizOriginal[i]
+    for j in range(len(roupasVenda)):
+        roupaVendida = roupaVendida + roupasVenda[j] + '|'
+    roupaVendida = roupaVendida + input('Para quem você vendeu esta roupa? ').upper() + '|'
+    AdcArquivo(roupaVendida,'venda.txt')
+    LerArquivo(matrizVenda,'venda.txt')
+
+
+#listar peças de roupa doadas
+def ListarDoacao(matrizDoacao):
+    matrizDoacao.clear()
+    LerArquivo(matrizDoacao,'doacao.txt')
+    for i in range(len(matrizDoacao)):
+        print(ExibirFormatado(matrizDoacao[i]))
+
+def ListarVenda(matrizVenda):
+    matrizVenda.clear()
+    LerArquivo(matrizVenda,'venda.txt')
+    for i in range(len(matrizVenda)):
+        print(ExibirFormatado(matrizVenda[i]))
+
+ 
+
+def LimparTerminal():
+    os.system('cls' if os.name == 'nt' else 'clear') #codigo para limpar o terminal.
+
+#chamar a função que o usuário deseja
+def ChamarFuncao(id):
+    if id == 1:
+        CadastrarRoupa(matrizPrincipal)
+        LimparTerminal()
+    elif id == 2:
+        ListarPecas(matrizPrincipal)
+    elif id == 3:
+        AlterarRoupa(matrizPrincipal)        
+    elif id == 4:
+        RemoverRoupa(matrizPrincipal)
+    elif id == 5:
+        ListarEstilos(matrizEstilos)
+    elif id == 6:
+        SelecionarEstilo()
+    elif id == 7:
+        ListarDoacao(matrizPrincipal)
+    elif id == 8:
+        ListarVenda(matrizPrincipal)
+    ChamarFuncao(MostrarMenu()) #no final essa função é chamada para retornar para o menu
+
+#def BuscarPecas(matrizOriginal):
+
+def MostrarMenu():
+    #menu padrão do programa
+    mensagemTerminal = "-----------------------------------------------\nGUARDA-ROUPA PESSOAL\n----------------------------------------------- \nSeja bem-vindo(a) ao seu guarda-roupa pessoal.\nO que você deseja fazer?\nDigite o número da opção desejada:\n\n1.CADASTRAR NOVAS PEÇAS.\n2.BUSCAR E LISTAR PEÇAS\n3.ALTERAR PEÇAS.\n4.REMOVER PEÇAS.\n5.LISTAR ESTILOS.\n6.SELECIONAR PEÇAS POR ESTILO.\n7.LISTAR PEÇAS DOADAS.\n8.LISTAR PEÇAS VENDIDAS.\n-----------------------------------------------\n"
+    #variável que armazena o que o usuário que fazer
+    try:
+        funcaoDesejada = int(input(mensagemTerminal))
+        return funcaoDesejada
+    except ValueError:
+        print('A opção inserida precisa ser um número inteiro.')
+    return None

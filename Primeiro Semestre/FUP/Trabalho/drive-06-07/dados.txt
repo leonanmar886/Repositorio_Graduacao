@@ -1,0 +1,2 @@
+1|calçado|pantufa|P|masculino|21/02/2016|doar|ficar|60.00|dormir|
+2|inferior|calça|M|masculino|azul|21/02/2022|venda|21|casual|
