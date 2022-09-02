@@ -19,7 +19,7 @@ int main(void) {
     valorLitrosUSA = valorUSA/capacidadeGalao;
     valorLitroBR = valorLitrosUSA/taxaConversao;
     printf("O valor do litro em reais e: %3.2lf\n", valorLitroBR);*/
-
+    
     //Terceira Questao
     /*float tempoSegundos, segundos;
     int horas, minutos;
@@ -30,5 +30,61 @@ int main(void) {
     horas = tempoSegundos / 3600; // as horas serão simplesmente o valor da divisão do tempo total em segundos por 3600.
     printf("O período decorrido foi de %2.1d horas, %2.1d minutos e %5.2f segundos\n", horas, minutos, segundos);*/
 
+    //Quarta Questao
+    int quantia, qtdCem, qtdCinq, qtdVint, qtdDez, qtdCinc, qtdDois, qtdUm;
+    printf("Digite o valor: \n");
+    scanf("%d", &quantia);
+    while (quantia > 0) {
+        if (quantia > 100){
+            qtdCem = 0;
+            while (quantia > 100) {
+                quantia -= 100;
+                qtdCem++;
+            }
+        }
+        if (quantia > 50){
+            qtdCinq = 0;
+            while (quantia > 50) {
+                quantia -= 50;
+                qtdCinq++;
+            }
+        }
+        if (quantia > 20){
+            qtdVint = 0;
+            while (quantia > 20) {
+                quantia -= 20;
+                qtdVint++;
+            }
+        }
+        if (quantia > 10){
+            qtdDez = 0;
+            while (quantia > 10) {
+                quantia -= 10;
+                qtdDez++;
+            }
+        }
+        if (quantia > 5){
+            qtdCinc = 0;
+            while (quantia > 5) {
+                quantia -= 5;
+                qtdCinc++;
+            }
+        }
+        if (quantia > 2){
+            qtdDois = 0;
+            while (quantia > 2) {
+                quantia -= 2;
+                qtdDois++;
+            }
+        }
+        if (quantia > 1){
+            qtdUm = 0;
+            while (quantia > 1) {
+                quantia -= 1;
+                qtdUm++;
+            }
+        }
+    }
+    printf("%d notas de 100, %d notas de 50, %d notas de 20, %d notas de 10, %d notas de 5, %d notas de 2 e %d notas de 1.", qtdCem, qtdCinq, qtdVint, qtdDez, qtdCinc, qtdDois, qtdUm);
 return 0;
 }
