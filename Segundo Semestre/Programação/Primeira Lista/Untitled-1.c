@@ -31,7 +31,7 @@ int main(void) {
     printf("O período decorrido foi de %2.1d horas, %2.1d minutos e %5.2f segundos\n", horas, minutos, segundos);*/
 
     //Quarta Questao
-    int quantia;
+    /*int quantia;
     int qtdCem = 0;
     int qtdVint = 0;
     int qtdCinc = 0;
@@ -92,5 +92,52 @@ int main(void) {
         }
     }
     printf("%d notas de 100, %d notas de 50, %d notas de 20, %d notas de 10, %d notas de 5, %d notas de 2 e %d notas de 1.", qtdCem, qtdCinq, qtdVint, qtdDez, qtdCinc, qtdDois, qtdUm);
+    */
+    //Quinta Questao
+    int n1,n2, n3, auxVariable, biggerN;
+    printf("Digite um número: ");
+    scanf("%d", &n1);
+    printf("Digite um número: ");
+    scanf("%d", &n2);
+    printf("Digite um número: ");
+    scanf("%d", &n3);
+    if(n1 > n2 && n1 > n3) {
+        biggerN = n1;
+        if (n2 >= n3) { 
+            auxVariable = n1;
+            n1 = n3;
+            n3 = auxVariable;
+        } else {
+            auxVariable = n2;
+            n2 = n3;
+            n3 = auxVariable; 
+            auxVariable = n1;
+            n1 = n3;
+            n3 = auxVariable;           
+        }
+    } else if (n3 > n1 && n3 > n2) {
+        biggerN = n3;
+        if (n1 >= n2) {
+            auxVariable = n1;
+            n1 = n2;
+            n2 = auxVariable;
+        }
+    } else if (n2 > n1 && n2 > n3) {
+        biggerN = n2;
+        if (n1 >= n3) {
+            auxVariable = n1;
+            n1 = n3;
+            n3 = auxVariable;
+            auxVariable = n2;
+            n2 = n3;
+            n3 = auxVariable;
+        } else {
+            auxVariable = n2;
+            n2 = n3;
+            n3 = auxVariable;           
+        }
+    }
+    printf("A ordem crescente é: %d, %d, %d e o maior número é: %d", n1,n2,n3, biggerN);
+
 return 0;
 }
