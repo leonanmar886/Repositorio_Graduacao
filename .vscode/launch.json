@@ -3,5 +3,20 @@
     // Hover to view descriptions of existing attributes.
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
-    "configurations": []
+    "configurations": [
+        {
+            "name": "(gdb)Iniciar",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "C:\\UFC\\Disciplinas\\Repositorio_Graduacao\\Segundo Semestre\\Programação\\Primeira Lista\\a.exe",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": true,
+            "MIMode": "gdb",
+            "miDebuggerPath": "C:\\MinGW\\bin\\gdb.exe"
+
+        }
+    ]
 }
