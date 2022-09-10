@@ -1,15 +1,22 @@
-int primo(int n) {
- if (n == 2) {
- return 1;
- } else if (n<2 || (n%2)== 0) {
- return 0;
- } else {
- int lim = (int) sqrt(n);
- for (int i=3; i<= lim; i+=2) {
- if (n% i == 0) {
- return 0;
- }
- }
- return 1;
- }
+#include <stdio.h>
+int MDC(int a, int b);
+
+int main(){
+    int a, b;
+    printf("Digite um número: ");
+    scanf("%d", &a);
+    printf("Digite um número: ");
+    scanf("%d", &b);
+    printf("%d", MDC(a, b));
+    return 0;
+}
+
+int MDC(int a, int b){
+    int r;
+    while(b != 0){
+        r = a % b;
+        a = b;
+        b = r;
+    }
+    return a;
 }

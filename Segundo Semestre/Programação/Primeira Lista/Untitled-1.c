@@ -94,7 +94,7 @@ int main(void) {
     printf("%d notas de 100, %d notas de 50, %d notas de 20, %d notas de 10, %d notas de 5, %d notas de 2 e %d notas de 1.", qtdCem, qtdCinq, qtdVint, qtdDez, qtdCinc, qtdDois, qtdUm);
     */
     //Quinta Questao
-    int n1,n2, n3, auxVariable, biggerN;
+    /* int n1,n2, n3, auxVariable, biggerN;
     printf("Digite um número: ");
     scanf("%d", &n1);
     printf("Digite um número: ");
@@ -138,6 +138,6 @@ int main(void) {
         }
     }
     printf("A ordem crescente é: %d, %d, %d e o maior número é: %d", n1,n2,n3, biggerN);
-
+    */
 return 0;
 }
