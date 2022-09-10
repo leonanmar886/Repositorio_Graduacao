@@ -1,38 +1,35 @@
 #include <stdio.h>
 #include <math.h>
-int primo(int n);
+int MDC(int a, int b);
+int MDCDif(int a, int b, int c);
 
 int main()
 {   
-    int a;
-    printf("Digite um número: ");
+    int a, b, c;
+    printf("Digite um numero: ");
     scanf("%d", &a);
-    int cont = 0;
-    int i = 0;
-    while (cont < a){
-        int bool = primo(i);
-        if (bool == 1){
-            printf("%d \n", i);
-            cont++;
-        }
-        i++;
-    }
+    printf("Digite um numero: ");
+    scanf("%d", &b);
+    printf("Digite um numero: ");
+    scanf("%d", &c);
+
+    printf("%d", MDCDif(a, b, c));
     
     return 0;
 }
 
-int primo(int n) {
-    if (n == 2) {
-    return 1;
-    } else if (n<2 || (n%2)== 0) {
-        return 0;
+int MDCDif(int a, int b, int c){
+    if (c == 0){
+        return MDC(a, b);
     } else {
-        int lim = (int) sqrt(n);
-        for (int i=3; i<= lim; i+=2) {
-            if (n% i == 0) {
-                return 0;
-            }
-        }
-        return 1;
+        return MDC(MDC(a,b), c);
+    }
+}
+
+int MDC(int a, int b) {
+    if(b == 0){
+        return a;
+    } else {
+        return MDC(b, a%b);
     }
 }
