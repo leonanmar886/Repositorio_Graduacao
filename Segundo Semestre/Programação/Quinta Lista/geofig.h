@@ -7,11 +7,11 @@ Ponto* pto_cria(float x, float y);
 /* Libera a memória de um ponto previamente criado */
 void pto_libera(Ponto* p);
 /* Copia valores os das coordenadas de um ponto para x e y*/
-void pto_acessa(Ponto* p, float* x, float* y);
+void pto_acessa(Ponto *p, float* cordenadax, float* cordenaday);
 /* Atribui novos valores às coordenadas de um ponto */
-void pto_atribui(Ponto* p, float x, float y);
+void pto_atribui(struct Ponto *p, float x, float y);
 /* Retorna a distância entre dois pontos */
-float pto_distancia(Ponto* p1, Ponto* p2);
+float pto_distancia(struct Ponto* p1, struct Ponto* p2);
 
 /* TAD: Circulo (ponto,raio) */
 /* Tipo exportado */
