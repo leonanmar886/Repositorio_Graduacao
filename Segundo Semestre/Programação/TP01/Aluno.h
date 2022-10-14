@@ -7,6 +7,10 @@ typedef struct aluno Aluno;
  * (50 e 30, respectivamente), a função deve retornar NULL. */
 Aluno *alu_novo(int matricula, char *nome, char *curso);
 
+int verifica_tamanho(char *nome, char *curso);
+
+int verifica_nulidade(char *nome, char *curso, int matricula);
+
 /* Libera a memória de um aluno previamente criado e atribui NULL ao aluno. */
 void alu_libera(Aluno **aluno);
 

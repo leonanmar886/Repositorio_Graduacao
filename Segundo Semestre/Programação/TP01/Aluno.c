@@ -27,11 +27,11 @@ int verifica_nulidade(char *nome, char *curso, int matricula){
  * (ii) o tamanho das strings nome e curso sejam maiores que os da especificação
  * (50 e 30, respectivamente), a função deve retornar NULL. */
 Aluno *alu_novo(int matricula, char *nome, char *curso) {
-  if (verifica_tamanho(nome, curso) == 1) { //verificação de nulidade dos campos
+  if (verifica_nulidade(nome, curso, matricula) == 1){ //verificação do tamanho das strings.
     return NULL;
   }
-
-  if (verifica_nulidade(nome, curso, matricula) == 1){ //verificação do tamanho das strings.
+  
+  if (verifica_tamanho(nome, curso) == 1) { //verificação de nulidade dos campos
     return NULL;
   } 
 
@@ -54,8 +54,8 @@ void alu_libera(Aluno **aluno){
 void alu_acessa(Aluno *aluno, int *matricula, char *nome, char *curso){
   if(aluno == NULL){
     *matricula = -1;
-    *nome = NULL;
-    *curso = NULL;
+    nome = NULL;
+    curso = NULL;
   }
   
   *matricula = aluno -> matricula;
@@ -69,7 +69,7 @@ void alu_acessa(Aluno *aluno, int *matricula, char *nome, char *curso){
  * das strings nome e curso sejam maiores que os da especificação (50 e 30,
  * respectivamente), a função não deve fazer a atribuição. */
 void alu_atribui(Aluno *aluno, int matricula, char *nome, char *curso){
-  if(verifica_tamanho(nome, curso) == 0 & verifica_nulidade(nome, curso, matricula == 0)){ // as atribuições só são realizadas se as verificações de nulidade e tamanho retornarem falso.
+  if((verifica_nulidade(nome, curso, matricula) == 0) && (verifica_tamanho(nome, curso) == 0)){ // as atribuições só são realizadas se as verificações de nulidade e tamanho retornarem falso.
     aluno -> matricula = matricula;
     strcpy(aluno -> nome, nome);
     strcpy(aluno -> curso, curso);
@@ -80,7 +80,24 @@ void alu_atribui(Aluno *aluno, int matricula, char *nome, char *curso){
  * possuem os mesmos dados, 0 caso os dados dos alunos possuam alguma diferença
  * e -1 caso pelo menos um dos alunos seja NULL.
  */
-int alu_igual(Aluno *aluno1, Aluno *aluno2);
+int alu_igual(Aluno *aluno1, Aluno *aluno2){
+  if(aluno1 == NULL || aluno2 == NULL){
+    return -1;
+  }
+  if(strcmp(aluno1 -> nome, aluno2 -> nome) != 0){ //retorna 0 se os nomes forem diferentes.
+    return 0;
+  } 
+  if(strcmp(aluno1 -> curso, aluno2 -> curso) != 0){ //retorna 0 se os cursos forem diferentes.
+    return 0;
+  } 
+  if(aluno1 -> matricula != aluno2 -> matricula){ //retorna 0 se as matriculas forem diferentes.
+    return 0;
+  } 
+
+  return 1;
+}
 
 /* Retorna o tamanho em bytes do TAD aluno. */
-int alu_tamanho();
+int alu_tamanho(){
+  return sizeof(Aluno);
+}
