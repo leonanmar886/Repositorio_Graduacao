@@ -8,22 +8,36 @@ struct aluno {
   char curso[30];
 };
 
+int verifica_tamanho(char *nome, char *curso){
+  if (strlen(nome) > 30 || strlen(curso) > 50){ //verificação do tamanho das strings. Se um dos campos for maior do que o limite, será retornado 1.
+    return 1;
+  } 
+  return 0; //os campos estão dentro do limite de tamanho.
+}
+
+int verifica_nulidade(char *nome, char *curso, int matricula){
+  if(matricula == -1 || nome == NULL || curso == NULL){
+    return 1; //algum dos campos está com valores inválidos, então será retornado 1.
+  }
+  return 0; //não foi detectado nulidades.
+}
+
 /* Aloca e retorna um aluno com os dados passados por parâmetro. Porém, para os
  * casos em que (i) pelo menos um dos parâmetros sejam nulos <-1, NULL, NULL>; e
  * (ii) o tamanho das strings nome e curso sejam maiores que os da especificação
  * (50 e 30, respectivamente), a função deve retornar NULL. */
 Aluno *alu_novo(int matricula, char *nome, char *curso) {
-  if (matricula == -1 || nome == NULL || curso == NULL) { //verificação de nulidade dos campos
+  if (verifica_tamanho(nome, curso) == 1) { //verificação de nulidade dos campos
     return NULL;
   }
 
-  if (strlen(nome) > 30 || strlen(curso) > 50){ //verificação do tamanho das strings.
+  if (verifica_nulidade(nome, curso, matricula) == 1){ //verificação do tamanho das strings.
     return NULL;
   } 
 
   Aluno *aluno = (Aluno *) malloc(sizeof(Aluno)); //aloca o novo aluno.
   aluno -> matricula = matricula;
-  strcpy(aluno -> nome, nome);
+  strcpy(aluno -> nome, nome); //destino, fonte.
   strcpy(aluno -> curso, curso);
 
   return aluno;
@@ -45,8 +59,8 @@ void alu_acessa(Aluno *aluno, int *matricula, char *nome, char *curso){
   }
   
   *matricula = aluno -> matricula;
-  strcpy(aluno -> nome, nome);
-  strcpy(aluno -> curso, curso);
+  strcpy(nome, aluno -> nome);
+  strcpy(curso, aluno -> curso);
 
 }
 
@@ -54,7 +68,13 @@ void alu_acessa(Aluno *aluno, int *matricula, char *nome, char *curso){
  * algum dos parâmetros sejam nulos <NULL, -1, NULL, NULL>; ou (ii) o tamanho
  * das strings nome e curso sejam maiores que os da especificação (50 e 30,
  * respectivamente), a função não deve fazer a atribuição. */
-void alu_atribui(Aluno *aluno, int matricula, char *nome, char *curso);
+void alu_atribui(Aluno *aluno, int matricula, char *nome, char *curso){
+  if(verifica_tamanho(nome, curso) == 0 & verifica_nulidade(nome, curso, matricula == 0)){ // as atribuições só são realizadas se as verificações de nulidade e tamanho retornarem falso.
+    aluno -> matricula = matricula;
+    strcpy(aluno -> nome, nome);
+    strcpy(aluno -> curso, curso);
+  }
+}
 
 /* Avalia se dois alunos são iguas. A função deve retornar 1 se os alunos
  * possuem os mesmos dados, 0 caso os dados dos alunos possuam alguma diferença
