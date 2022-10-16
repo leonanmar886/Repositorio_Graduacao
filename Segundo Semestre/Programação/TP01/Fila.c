@@ -45,14 +45,15 @@ int fila_insere(Fila *fila, Aluno *aluno) {
   }
   
   for(int i = 0; i <= fila->tamanho; i++){ //loop que percorre toda a lista
+    int inteiro = fila->fila_alunos[i].matricula;
     if(fila->fila_alunos[i].matricula == aluno->matricula){ //verifica se já existe nos alunos da lista, algum com a mesma matrícula do aluno passado por parâmetro.
       return 0;
     }
   }
   if(fila->tamanho <= fila->capacidade_maxima){
     int tamanho = fila->tamanho;
+    (fila->fila_alunos)[tamanho] = *aluno;
     fila->tamanho++;
-    fila->fila_alunos[tamanho] = *aluno;
     return 1;
   }
   return 2;
@@ -65,8 +66,9 @@ Aluno *fila_retira(Fila *fila) {
   if((fila == NULL) || (tamanho == 0)){ //verifica se a fila está vazia 
     return NULL;
   }
-  Aluno* aluno_retirado = (&(fila->fila_alunos))[tamanho]; //variavel que guarda o endereço de memória do aluno retirado
-  alu_libera(fila->fila_alunos[tamanho]);
+  Aluno* aluno_retirado = (&(fila->fila_alunos)[tamanho]); //variavel que guarda o endereço de memória do aluno retirado
+  //alu_libera(&(fila->fila_alunos[tamanho]));
+  //free((&(fila->fila_alunos))[tamanho]);
   fila->tamanho--;
   return aluno_retirado;
 }
