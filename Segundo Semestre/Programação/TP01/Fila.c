@@ -40,13 +40,35 @@ int fila_libera(Fila **fila) {
  * adicionado) e -1 caso a fila ou aluno sejam NULL
  */
 int fila_insere(Fila *fila, Aluno *aluno) {
-  return -10;
+  if((fila == NULL) || (aluno == NULL)){ //caso um dos parâmetros seja nulo
+    return -1;
+  }
+  
+  for(int i = 0; i <= fila->tamanho; i++){ //loop que percorre toda a lista
+    if(fila->fila_alunos[i].matricula == aluno->matricula){ //verifica se já existe nos alunos da lista, algum com a mesma matrícula do aluno passado por parâmetro.
+      return 0;
+    }
+  }
+  if(fila->tamanho <= fila->capacidade_maxima){
+    int tamanho = fila->tamanho;
+    fila->tamanho++;
+    fila->fila_alunos[tamanho] = *aluno;
+    return 1;
+  }
+  return 2;
 }
 
 /* Remove um aluno na fila. Retorna o aluno ou NULL caso a fila esteja vazia ou
  * seja NULL */
 Aluno *fila_retira(Fila *fila) {
-  return NULL;
+  int tamanho = fila->tamanho;
+  if((fila == NULL) || (tamanho == 0)){ //verifica se a fila está vazia 
+    return NULL;
+  }
+  Aluno* aluno_retirado = (&(fila->fila_alunos))[tamanho]; //variavel que guarda o endereço de memória do aluno retirado
+  alu_libera(fila->fila_alunos[tamanho]);
+  fila->tamanho--;
+  return aluno_retirado;
 }
 
 /* Recupera o primeiro aluno da fila. Retorna o aluno ou NULL caso a fila esteja
@@ -62,6 +84,14 @@ Aluno *fila_primeiro(Fila *fila) {
  * lista e NULL caso contrário, isto é, (i) fila vazia; (ii) não exista aluno
  * com a matricula fornecida; ou (iii) a fila seja NULL */
 Aluno *fila_busca(Fila *fila, int matricula) {
+  if((fila == NULL) || (fila->tamanho == 0)){
+    return NULL;
+  }
+  for(int i = 0; i <= fila->tamanho; i++){
+    if(fila->fila_alunos[i].matricula == matricula){
+      return (&(fila->fila_alunos))[i];
+    }
+  }
   return NULL;
 }
 
