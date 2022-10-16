@@ -228,9 +228,7 @@ float teste_fila_libera_com_dados_validos() {
 
 float teste_fila_libera_com_dados_nulos() {
   float pontuacao = 0;
-  Fila *fila = NULL;
-  fila_libera(&fila);
-  if (fila == NULL) {
+  if (fila_libera(NULL) == 0) {
     printf("[Passou 0.50] - Teste da função fila_libera() com dados nulos!\n");
     pontuacao = 0.50;
   } else {
@@ -323,8 +321,7 @@ float teste_fila_insere_com_dados_nulos() {
           "[Falhou 0.00] - Teste da função fila_insere() com dados nulos!\n");
     }
   } else {
-    printf(
-        "[Falhou 0.00] - Teste da função fila_adiciona() com dados nulos!\n");
+    printf("[Falhou 0.00] - Teste da função fila_insere() com dados nulos!\n");
   }
   return pontuacao;
 }
@@ -345,7 +342,7 @@ float teste_fila_retira_com_dados_validos() {
       aluno = fila_retira(fila);
       if (alu_igual(aluno, jaco) == 1) {
         aluno = fila_retira(fila);
-        if (alu_igual(aluno, jaco) == 1) {
+        if (alu_igual(aluno, jose) == 1) {
           printf("[Passou 1.00] - Teste da função fila_retira() com dados "
                  "válidos!\n");
           pontuacao = 1.0;

@@ -7,8 +7,9 @@ typedef struct fila Fila;
 Fila *fila_cria();
 
 /* Libera a memória de uma fila previamente criada e atribui NULL ao ponteiro
- * fila */
-void fila_libera(Fila **fila);
+ * fila. Retorna 1 caso seja possível fazer a liberação e 0 caso a fila
+ * informada seja NULL. */
+int fila_libera(Fila **fila);
 
 /* Insere um aluno na fila. Retorna 1 se foi possível adicionar, 0 caso já
  * exista um aluno com a mesma matricula (nesse caso, o aluno não pode ser
