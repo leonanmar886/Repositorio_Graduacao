@@ -44,19 +44,19 @@ int fila_insere(Fila *fila, Aluno *aluno) {
     return -1;
   }
 
-  int *matComparada;
+  int matComparada;
   char nomeComparado[50];
   char cursoComparado[30];
 
-  int *matricula;
+  int matricula;
   char nome[50];
   char curso[30];
 
-  alu_acessa(aluno, matComparada, nomeC, cursoComparado);
+  alu_acessa(aluno, &matComparada, nomeComparado, cursoComparado);
 
   if (fila -> tamanho > 0){
     for (int i = 0; i < fila->tamanho; i++) {
-      alu_acessa((&(fila->fila_alunos))[i], matricula, nome, curso);
+      alu_acessa((&(fila->fila_alunos))[i], &matricula, nome, curso);
 
       if (matricula == matComparada) {
         return 0;
@@ -83,7 +83,7 @@ Aluno *fila_retira(Fila *fila) {
   Aluno *aluno_removido = (&(fila->fila_alunos))[0];
   
   for(int i = 1; i < fila->tamanho; i++){
-    (&(fila->fila_alunos))[i - 1] = (&(fila->fila_alunos))[i]
+    (&(fila->fila_alunos))[i - 1] = (&(fila->fila_alunos))[i];
   }
 
   (&(fila->fila_alunos))[fila -> tamanho + 1] = NULL;
@@ -110,13 +110,13 @@ Aluno *fila_busca(Fila *fila, int matricula) {
     return NULL;
   }
   for (int i = 0; i < fila->tamanho; i++) {
-    int *mat;
+    int mat;
     char nome[50];
     char curso[30];
 
-    alu_acessa((&(fila->fila_alunos))[i], mat, nome, curso);
+    alu_acessa((&(fila->fila_alunos))[i], &mat, nome, curso);
     
-    if (matricula == *mat) {
+    if (matricula == mat) {
       return (&(fila->fila_alunos))[i];
     }
   }
