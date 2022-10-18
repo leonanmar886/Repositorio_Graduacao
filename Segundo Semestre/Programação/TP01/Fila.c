@@ -44,21 +44,21 @@ int fila_insere(Fila *fila, Aluno *aluno) {
     return -1;
   }
 
-  int mat;
-  char name[50];
-  char course[30];
+  int matComparada;
+  char nomeComparado[50];
+  char cursoComparado[30];
 
   int *matricula;
   char nome[50];
   char curso[30];
 
-  alu_acessa(aluno, &mat, name, course);
+  alu_acessa(aluno, matComparada, nomeC, course);
 
   if (fila -> tamanho > 0){
     for (int i = 0; i < fila->tamanho; i++) {
       alu_acessa((&(fila->fila_alunos))[i], matricula, nome, curso);
 
-      if (matricula == mat) {
+      if (matricula == matComparada) {
         return 0;
       }
     }
@@ -86,15 +86,6 @@ Aluno *fila_retira(Fila *fila) {
   fila->tamanho--;
   
   return aluno_removido;
-}
-
-/* Recupera o primeiro aluno da fila. Retorna o aluno ou NULL caso a fila esteja
- * vazia ou seja NULL */
-Aluno *fila_primeiro(Fila *fila) {
-  if (fila == NULL || fila->tamanho == 0) {
-    return NULL;
-  }
-  return (&(fila->fila_alunos))[0];
 }
 
 /* Recupera o primeiro aluno da fila. Retorna o aluno ou NULL caso a fila esteja
