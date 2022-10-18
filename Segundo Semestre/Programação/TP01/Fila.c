@@ -52,7 +52,7 @@ int fila_insere(Fila *fila, Aluno *aluno) {
   char nome[50];
   char curso[30];
 
-  alu_acessa(aluno, matComparada, nomeC, course);
+  alu_acessa(aluno, matComparada, nomeC, cursoComparado);
 
   if (fila -> tamanho > 0){
     for (int i = 0; i < fila->tamanho; i++) {
@@ -80,9 +80,14 @@ Aluno *fila_retira(Fila *fila) {
     return NULL;
   }
 
-  Aluno *aluno_removido = (&(fila->fila_alunos))[fila->tamanho - 1];
+  Aluno *aluno_removido = (&(fila->fila_alunos))[0];
   
-  free((&(fila->fila_alunos))[fila->tamanho - 1]);
+  for(int i = 1; i < fila->tamanho; i++){
+    (&(fila->fila_alunos))[i - 1] = (&(fila->fila_alunos))[i]
+  }
+
+  (&(fila->fila_alunos))[fila -> tamanho + 1] = NULL;
+  
   fila->tamanho--;
   
   return aluno_removido;
