@@ -44,7 +44,7 @@ int fila_insere(Fila *fila, Aluno *aluno) {
     return -1;
   }
 
-  int matComparada;
+  int *matComparada;
   char nomeComparado[50];
   char cursoComparado[30];
 
