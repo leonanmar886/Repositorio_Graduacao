@@ -73,6 +73,15 @@ int fila_insere(Fila *fila, Aluno *aluno) {
   return 2;
 }
 
+/* Recupera o primeiro aluno da fila. Retorna o aluno ou NULL caso a fila esteja
+ * vazia ou seja NULL */
+Aluno *fila_primeiro(Fila *fila) {
+  if (fila == NULL || fila->tamanho == 0) {
+    return NULL;
+  }
+  return (&(fila->fila_alunos))[0];
+}
+
 /* Remove um aluno na fila. Retorna o aluno ou NULL caso a fila esteja vazia ou
  * seja NULL */
 Aluno *fila_retira(Fila *fila) {
@@ -91,15 +100,6 @@ Aluno *fila_retira(Fila *fila) {
   fila->tamanho--;
   
   return aluno_removido;
-}
-
-/* Recupera o primeiro aluno da fila. Retorna o aluno ou NULL caso a fila esteja
- * vazia ou seja NULL */
-Aluno *fila_primeiro(Fila *fila) {
-  if (fila == NULL || fila->tamanho == 0) {
-    return NULL;
-  }
-  return (&(fila->fila_alunos))[0];
 }
 
 /* Busca aluno pelo número de matricula. Retorna o aluno se este estiver na
