@@ -96,13 +96,10 @@ int fila_insere(Fila *fila, Aluno *aluno) {
 /* Recupera o primeiro aluno da fila. Retorna o aluno ou NULL caso a fila esteja
  * vazia ou seja NULL */
 Aluno *fila_primeiro(Fila *fila) {
-/*  if(fila == NULL){
+  if(fila == NULL || fila->primeiro == NULL){
     return NULL;
   }
-  No* primeiroNo = fila->primeiro;
-  Aluno* primeiroAluno = primeiroNo -> aluno;
-  return primeiroAluno;*/
-  return NULL;
+  return fila->primeiro->aluno;
 }
 
 /* Remove um aluno na fila. Retorna o aluno ou NULL caso a fila esteja vazia ou
