@@ -51,8 +51,8 @@ int fila_insere(Fila *fila, Aluno *aluno) {
   }
   
   if(fila->primeiro == NULL){ //se o primeiro no da fila for nulo, ou seja, fila vazia
-    No* novoNo = (No*) malloc(sizeof(No));
-    novoNo->aluno = aluno;
+    No* novoNo = (No*) malloc(sizeof(No)); //aloca um novo nó;
+    novoNo->aluno = aluno; //atribui os seus campos
     novoNo->proximo = NULL;
     No** enderecoNoComparado = (&(fila -> primeiro));
     *enderecoNoComparado = novoNo;
@@ -118,6 +118,7 @@ Aluno *fila_retira(Fila *fila) {
 /* Busca aluno pelo número de matricula. Retorna o aluno se este estiver na
  * lista e NULL caso contrário, isto é, (i) fila vazia; (ii) não exista aluno
  * com a matricula fornecida; ou (iii) a fila seja NULL */
+
 Aluno *fila_busca(Fila *fila, int matricula) {
   if(fila->primeiro == NULL || fila == NULL){
     return NULL;
@@ -139,6 +140,7 @@ Aluno *fila_busca(Fila *fila, int matricula) {
   }
 return NULL;
 }
+
 
 /* Verifica se a fila está vazia. Retorna 1 se a fila estiver vazia, 0 caso não
  * esteja vazia e -1 se a fila for NULL
