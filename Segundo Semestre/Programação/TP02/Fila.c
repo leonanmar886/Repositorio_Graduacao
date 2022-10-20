@@ -49,16 +49,13 @@ int fila_insere(Fila *fila, Aluno *aluno) {
   if (aluno == NULL || fila == NULL) {
     return-1;
   }
-
-  //Cria o novo nó que será inserido na fila, e o preenche com os valores passados por parâmetro.
-  No novoNo;
-  novoNo.aluno = aluno;
-  novoNo.proximo = NULL;
-  No** enderecoNoComparado = (&(fila -> primeiro));
-  No* noComparado = fila -> primeiro;
   
-  if(noComparado == NULL){ //se o primeiro no da fila for nulo, ou seja, fila vazia
-    fila -> primeiro = &novoNo;
+  if(fila->primeiro == NULL){ //se o primeiro no da fila for nulo, ou seja, fila vazia
+    No* novoNo = (No*) malloc(sizeof(No));
+    novoNo->aluno = aluno;
+    novoNo->proximo = NULL;
+    No** enderecoNoComparado = (&(fila -> primeiro));
+    *enderecoNoComparado = novoNo;
     fila -> tamanho++;
     return 1;
   }
@@ -72,21 +69,28 @@ int fila_insere(Fila *fila, Aluno *aluno) {
   char curso[30];
   
   alu_acessa(aluno, &matFixa, nomeFixo, cursoFixo); //atribui as variaveis passadas na função, os valores dos campos de aluno.
+
+  No* noAtual = fila->primeiro;
+  No* noAnterior = noAtual;
   
-  while(noComparado->proximo != NULL){ //enquanto o nó apontar para um próximo, ou seja, enquanto o nó comparado não seja o último nó da fila.
-    noComparado = *enderecoNoComparado;
-    No *proximo = noComparado->proximo;
-    alu_acessa(proximo->aluno, &matricula, nome, curso); //acessa os valores do aluno do próximo nó
+  while(noAtual != NULL){ //enquanto o nó apontar para um próximo, ou seja, enquanto o nó comparado não seja o último nó da fila.
+    alu_acessa(noAtual->aluno, &matricula, nome, curso); //acessa os valores do aluno do próximo nó
   
         if (matricula == matFixa) {
           return 0;
         }
   
-    enderecoNoComparado = (&(noComparado->proximo)); //pula para o próximo nó.
+    noAnterior = noAtual;
+    noAtual = noAtual -> proximo;//pula para o próximo nó.
   }
-  noComparado->proximo = &novoNo; //o nó que antes era o ultimo da fila, agora aponta para o novo nó criado.
-  fila->tamanho++;
-  return 1;
+  
+    No* novoNo = (No*) malloc(sizeof(No));
+    novoNo->aluno = aluno;
+    novoNo->proximo = NULL;
+    No** enderecoNoComparado = (&(noAnterior -> proximo));
+    *enderecoNoComparado = novoNo;
+    fila -> tamanho++;
+    return 1;
 }
 
 /* Recupera o primeiro aluno da fila. Retorna o aluno ou NULL caso a fila esteja
