@@ -108,8 +108,9 @@ Aluno *fila_retira(Fila *fila) {
   if(fila == NULL || fila->primeiro == NULL){
     return NULL;
   }
-  Aluno *primeiroAluno = fila_primeiro(fila);
-  fila->primeiro = *(&(fila->primeiro->proximo));
+  Aluno *primeiroAluno = fila->primeiro->aluno;
+  No** enderecoFilaPrimeiro = &(fila->primeiro);
+  *enderecoFilaPrimeiro = fila->primeiro->proximo;
   fila->tamanho--;
   return primeiroAluno;
 }
