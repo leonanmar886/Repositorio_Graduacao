@@ -119,21 +119,25 @@ Aluno *fila_retira(Fila *fila) {
  * lista e NULL caso contrário, isto é, (i) fila vazia; (ii) não exista aluno
  * com a matricula fornecida; ou (iii) a fila seja NULL */
 Aluno *fila_busca(Fila *fila, int matricula) {
+  if(fila->primeiro == NULL || fila == NULL){
+    return NULL;
+  }
+  
   int matFixa;
   char nomeFixo[50];
   char cursoFixo[30];
-  No **enderecoNoAtual = (&(fila->primeiro));
-  No *noAtual;
+  No *noAtual = fila->primeiro;
 
-  alu_acessa(fila_primeiro(fila), &matFixa, nomeFixo, cursoFixo);
+  while(noAtual != NULL){
+    alu_acessa(noAtual->aluno, &matFixa, nomeFixo, cursoFixo); //acessa os valores do aluno do próximo nó
+  
+        if (matricula == matFixa) {
+          return noAtual->aluno;
+        }
 
-  while(matFixa != matricula){
-    noAtual = *enderecoNoAtual;
-    alu_acessa(noAtual->proximo->aluno, &matFixa, nomeFixo, cursoFixo);
-    enderecoNoAtual = (&(noAtual -> proximo));
+    noAtual = noAtual -> proximo;//pula para o próximo nó.
   }
-
-  return noAtual -> aluno;
+return NULL;
 }
 
 /* Verifica se a fila está vazia. Retorna 1 se a fila estiver vazia, 0 caso não
