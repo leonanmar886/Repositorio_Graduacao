@@ -13,14 +13,27 @@ struct pilha {
 
 /* Aloca espaço em memória e retorna uma pilha. */
 Pilha *pilha_cria() {
-  return NULL;
+    Pilha *pilha = (Pilha *)malloc(sizeof(Pilha));
+  pilha->pilha_alunos = (Aluno *)malloc(CAPACIDADE_INICIAL * sizeof(Aluno *));
+  pilha->capacidade_maxima = CAPACIDADE_INICIAL;
+  pilha->tamanho = 0;
+  return pilha;
 }
 
 /* Libera a memória de uma pilha previamente criada e atribui NULL ao ponteiro
  * pilha. Retorna 1 caso seja possível fazer a liberação e 0 caso a pilha
  * informada seja NULL. */
 int pilha_libera(Pilha **pilha) {
-  return -2;
+    if (pilha != NULL) {
+      if ((*pilha)->tamanho > 0) {
+        free((*pilha)->pilha_alunos);
+        (*pilha)->pilha_alunos = NULL;
+      }
+    free(*pilha);
+    *pilha = NULL;
+    return 1;
+  }
+  return 0;
 }
 
 /* Insere um aluno na Pilha. Retorna 1 se foi possível adicionar, 0 caso já
