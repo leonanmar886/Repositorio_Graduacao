@@ -15,11 +15,28 @@ int teste_passageiro_novo(){
   Passageiro* passageiro3 = passageiro_novo(1, NULL, NULL); // passageiro com dados nulos,
 
   if(passageiro1 == NULL || passageiro2 != NULL || passageiro3 != NULL){
-    printf("Falho no teste de criação de passageiro.");
+    printf("Falho no teste de criação de passageiro.\n");
     return 0;
   }
 
-  printf("Passou no teste de criação de passageiro.");
+  printf("Passou no teste de criação de passageiro.\n");
+  return 1;
+}
+
+int teste_passageiro_libera(){
+
+  Passageiro* passageiro = passageiro_novo(1, "Abraão", "Computação");
+  Passageiro* passageiro2 = NULL;
+
+  passageiro_libera(&passageiro);
+  passageiro_libera(&passageiro2);
+
+  if (passageiro != NULL || passageiro2 != NULL) {
+    printf("Falhou no teste de liberação de passageiro.\n");
+    return 0;
+  } 
+  
+  printf("Passou no teste de liberação de passageiro.\n");
   return 1;
 }
 
