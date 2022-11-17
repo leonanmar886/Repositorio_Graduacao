@@ -15,7 +15,7 @@ int teste_passageiro_novo(){
   Passageiro* passageiro3 = passageiro_novo(1, NULL, NULL); // passageiro com dados nulos,
 
   if(passageiro1 == NULL || passageiro2 != NULL || passageiro3 != NULL){
-    printf("Falho no teste de criação de passageiro.\n");
+    printf("Falhou no teste de criação de passageiro.\n");
     return 0;
   }
 
@@ -90,6 +90,39 @@ float teste_fila_libera_com_dados_validos() {
   }
 }
 
+float teste_fila_busca_com_dados_validos() {
+  int id;
+  char nome[50];
+  char endereco[100];
+
+  Fila *fila = fila_cria();
+  if (fila != NULL) {
+    Passageiro *abraao = passageiro_novo(1, "Abraão", "Rua Ipanema, 221");
+    fila_insere(fila, abraao);
+    Passageiro *jaco = passageiro_novo(2, "Jaco", "Rua Ipanema, 222");
+    fila_insere(fila, jaco);
+    Passageiro *jose = passageiro_novo(3, "Jose", "Rua Ipanema, 223");
+    fila_insere(fila, jose);
+    Passageiro *aux = fila_busca(fila, 2);
+    Passageiro *aux1 = fila_busca(NULL, 1);
+    Passageiro *aux2 = fila_busca(fila, 5);
+    if (aux != NULL && aux2 == NULL && aux1 == NULL) {
+      passageiro_acessa(aux, &id, nome, endereco);
+      if (id == 2 && strcmp(nome, "Jaco") == 0 &&
+          strcmp(endereco, "Rua Ipanema, 222") == 0) {
+        printf("[Passou]: Fila busca.\n");
+        return 1;
+      } else {
+        printf("[Falhou]: Fila busca.\n");
+      }
+    } else {
+      printf("[Falhou]: Fila busca.\n");
+    }
+  } else {
+    printf("[Falhou]: Fila busca.\n");
+  }
+  return 0;
+}
 
 int main(void) {
   printf("Hello World, Equipe\n");
