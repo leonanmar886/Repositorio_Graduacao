@@ -124,6 +124,34 @@ float teste_fila_busca_com_dados_validos() {
   return 0;
 }
 
+float teste_fila_insere() {
+  Fila *fila = fila_cria();
+  if (fila != NULL) {
+    Passageiro *abraao = passageiro_novo(1, "Abraão", "Rua Ipanema, 221");
+    Passageiro *jorge = passageiro_novo(1, "Jorge", "Rua Ipanema, 224");
+    if (fila_insere(fila, abraao) == 1 && fila_insere(fila, jorge) != 0 && fila_insere(fila, NULL) == -1) {
+      Passageiro *jaco = passageiro_novo(2, "Jaco", "Rua Ipanema, 222");
+      if (fila_insere(fila, jaco) == 1) {
+        Passageiro *jose = passageiro_novo(3, "Jose", "Rua Ipanema, 223");
+        if (fila_insere(fila, jose) == 1) {
+          printf("[Passou]: fila insere\n");
+          return 1;
+        } else {
+          printf("[Falhou]: fila insere\n");
+        }
+      } else {
+        printf("[Falhou]: fila insere\n");
+      }
+    } else {
+      printf("[Falhou]: fila insere\n");
+    }
+  } else {
+    printf(
+        "[Falhou]: fila insere\n");
+  }
+  return 0;
+}
+
 int main(void) {
   printf("Hello World, Equipe\n");
   return 0;
