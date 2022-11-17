@@ -44,6 +44,20 @@ void voo_acessa(Voo *voo, int *codigo, char *origem, char *destino) {
 }
 
 
+void libera_voo(Voo **voo) {
+  if(voo != NULL){
+    free(*voo);
+    *voo = NULL;      
+  } 
+}
 
+
+void edita_voo(Voo *voo, int codigo, char *origem, char *destino) {
+  if (voo != NULL && verifica(codigo, origem, destino) == 1) {
+    voo->codigo = codigo;
+    strcpy(voo->origem, origem);
+    strcpy(voo->destino, destino);
+  }  
+}
 
 

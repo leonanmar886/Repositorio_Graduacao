@@ -8,7 +8,7 @@ Passageiro* passageiro_novo(int id, char* nome, char* endereço);
 
 void passa_libera(Passageiro** passageiro);
 
-void leitura_passageiro(Passageiro* passa, int* id, char* nome, char* endereco);
+void passageiro_acessa(Passageiro* passa, int* id, char* nome, char* endereco);
 
 void passageiro_edita(Passageiro* passa, int id, char* nome, char* end);
   

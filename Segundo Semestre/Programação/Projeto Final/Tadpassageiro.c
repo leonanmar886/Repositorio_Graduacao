@@ -27,13 +27,13 @@ Passageiro* passageiro_novo(int id, char* nome, char* endereco){
   return novo_viajante;
 }
 
-void passa_libera(Passageiro** passageiro){
+void passa_libera(Passageiro **passageiro){
   if(passageiro!= NULL){
     free(*passageiro);
     *passageiro = NULL;      
   } 
 }
-void leitura_passageiro(Passageiro* passa, int* id, char* nome, char* endereco){
+void passageiro_acessa(Passageiro* passa, int* id, char* nome, char* endereco){
   if(passa == NULL){
     *id = -1;
     strcpy(nome,"NULL");
