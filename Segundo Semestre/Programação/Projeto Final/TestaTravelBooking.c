@@ -4,7 +4,7 @@
 #include "Passageiro.h"
 
 int teste_passageiro_novo(){
-  char nome1[50] = "Carlinhos";
+  char nome1[50] = "Carlinho";
   char endereco1[100] = "Rua Taquari, 3850";
 
   char nome2[50] = "89849384";
