@@ -25,7 +25,7 @@ int teste_passageiro_novo(){
 
 int teste_passageiro_libera(){
 
-  Passageiro* passageiro = passageiro_novo(1, "Abraão", "Computação");
+  Passageiro* passageiro = passageiro_novo(1, "Abraão", "Rua Nova Conquista, 3849");
   Passageiro* passageiro2 = NULL;
 
   passageiro_libera(&passageiro);
@@ -38,6 +38,18 @@ int teste_passageiro_libera(){
   
   printf("Passou no teste de liberação de passageiro.\n");
   return 1;
+}
+
+int teste_fila_cria(){
+  Fila *fila = fila_cria();
+  if (fila != NULL) {
+    printf("Passou no teste de criação de fila.\n");
+    return 1;
+  } else {
+    printf("Falhou no teste de criação de fila.\n");
+    return 0;
+  }
+  
 }
 
 int main(void) {
