@@ -4,7 +4,7 @@
 #include "Passageiro.h"
 
 int teste_passageiro_novo(){
-  char nome1[50] = "Carlinho";
+  char nome1[50] = "Carlinhos";
   char endereco1[100] = "Rua Taquari, 3850";
 
   char nome2[50] = "89849384";
@@ -23,6 +23,30 @@ int teste_passageiro_novo(){
   return 1;
 }
 
+float teste_aluno_acessa_com_dados_validos() {
+  int id;
+  char nome[50];
+  char endereco[100];
+
+  Passageiro *passageiro = passageiro_novo(1, "Abraão", "Rua Taquari, 3850");
+  if (passageiro != NULL) {
+    passageiro_acessa(passageiro, &id, nome, endereco);
+    if (id == 1 && strcmp(nome, "Abraão") == 0 &&
+        strcmp(endereco, "Rua Taquari, 3850") == 0) {
+      printf(
+          "Passou no teste de acesso de passageiros\n");
+      return 1;
+    } else {
+      printf(
+          "Falhou no teste de acesso de passageiros\n");
+      return 0;
+    }
+  } else {
+    printf("Fassou no teste de acesso de passageiros\n");
+    return 0;
+  }
+}
+
 int teste_passageiro_libera(){
 
   Passageiro* passageiro = passageiro_novo(1, "Abraão", "Computação");
@@ -39,6 +63,33 @@ int teste_passageiro_libera(){
   printf("Passou no teste de liberação de passageiro.\n");
   return 1;
 }
+
+int teste_fila_cria() {
+  Fila *fila = fila_cria();
+  if (fila != NULL) {
+    printf("Passou na função de criação de fila.\n");
+    return 1;
+  } else {
+    printf("Falhou na função de criação de fila.\n");
+    return 0;
+  }
+}
+
+float teste_fila_libera_com_dados_validos() {
+  float pontuacao = 0;
+  Fila *fila = fila_cria();
+  fila_libera(&fila);
+  if (fila != NULL || fila_libera(NULL) != 0) {
+    printf(
+        "Falhou na função de liberar fila.\n");
+    return 0;
+  } else {
+    printf(
+        "Passou na função de criação de fila.\n");
+    return 1;
+  }
+}
+
 
 int main(void) {
   printf("Hello World, Equipe\n");
